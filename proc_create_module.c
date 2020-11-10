@@ -55,7 +55,7 @@ static struct file_operations proc_fops =
 void create_new_proc_entry(void) 
 {
 	// TODO: There is currently a permissions issue with this new proc dir, working it out
-	proc_create("hello",0666,NULL,&proc_fops);
+	proc_create("graceful_shutdown",0666,NULL,&proc_fops);
 	msg=kmalloc(GFP_KERNEL,10*sizeof(char));
 }
 
