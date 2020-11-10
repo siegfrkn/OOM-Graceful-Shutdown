@@ -1,21 +1,22 @@
-#include <linux/module.h>
-#include <linux/moduleparam.h>
+
 #include <linux/init.h>
 #include <linux/kernel.h>
+#include <linux/module.h>
+#include <linux/moduleparam.h>
 #include <linux/slab.h> 
 #include <linux/proc_fs.h>
 #include <linux/uaccess.h>
+
 #define BUFSIZE  100
  
  
-MODULE_LICENSE("Dual BSD/GPL");
-MODULE_AUTHOR("Liran B.H");
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Katrina Siegfried");
 
 int len,temp;
 char *msg;
  
-// static struct proc_dir_entry *ent;
- 
+// Create a write function that is called every time a proc write is made
 static ssize_t mywrite(struct file *file, const char __user *ubuf,size_t count, loff_t *ppos) 
 {
 	raw_copy_from_user(msg,ubuf,count);
@@ -25,6 +26,7 @@ static ssize_t mywrite(struct file *file, const char __user *ubuf,size_t count, 
 	return count;
 }
 
+// Create a read function that is called every time a proc read is made
 static ssize_t myread(struct file *file, char __user *ubuf,size_t count, loff_t *ppos) 
 {
 	printk( KERN_DEBUG "read handler\n");
@@ -41,30 +43,35 @@ static ssize_t myread(struct file *file, char __user *ubuf,size_t count, loff_t 
 	   
 	return count;
 }
- 
+
+// Overwrite the default struct parameters for file_operations for this proc dir
 static struct file_operations proc_fops = 
 {
-	// .owner = THIS_MODULE,
 	.read = myread,
 	.write = mywrite,
 };
 
+// Create a new entry in the proc file system
 void create_new_proc_entry(void) 
 {
 	proc_create("hello",0666,NULL,&proc_fops);
 	msg=kmalloc(GFP_KERNEL,10*sizeof(char));
 }
- 
+
+// Init module for creating the new proc directory
 static int proc_init(void)
 {
 	printk( KERN_DEBUG "\n\n\nmodule begin\n");
 	create_new_proc_entry();
 	return 0;
 }
- 
+
+// Exit module for creating the new proc directory
 static void proc_cleanup(void)
 {
+	// Uncomment the line below to remove the proc entry on exit of this module
 	// remove_proc_entry("hello",NULL);
+
 	printk( KERN_DEBUG "module end\n");
 }
  
