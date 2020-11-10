@@ -54,6 +54,7 @@ static struct file_operations proc_fops =
 // Create a new entry in the proc file system
 void create_new_proc_entry(void) 
 {
+	// TODO: There is currently a permissions issue with this new proc dir, working it out
 	proc_create("hello",0666,NULL,&proc_fops);
 	msg=kmalloc(GFP_KERNEL,10*sizeof(char));
 }
