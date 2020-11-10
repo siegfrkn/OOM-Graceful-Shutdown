@@ -1,0 +1,12 @@
+TODO:
+
+Need to mark a process for shutdown, this could be done in a few different ways:
+- could pass name of process or PID to LKM as parameter when loading (could eventually be configured in file)
+- could directly edit the /proc filesystem to mark as such
+
+Need to add a parameter to the process struct (tldp.org/LDP/lki/lki-2.html), this will certainly require recompiling the kernel.
+- could add a process state flag and leverage existing, but this will consider some significant changes
+- could create a new field for a process
+- could leverage the existing field of p->personality which is teh way certain system calls behave in order to emulate the "personality" of foreign flavors of linux
+
+Need to get list of all processes and add their graceful shutdown indicator into a list in the proc filesystem
