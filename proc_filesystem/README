@@ -1,0 +1,21 @@
+This project builds a lkm named "proc_create_module" which creates a new proc filesystem entry /proc/graceful_shutdown.
+
+Usage:
+        make all                make .ko and associated files
+        make clean              clean all files
+
+To insert the module:
+        sudo insmod proc_create_module.ko
+
+To remove the module:
+        sudo rmmod proc_create_module
+
+To view the new file system:
+        sudo ls /proc
+
+To write to the file system (demo functionality at the moment not working):
+        sudo echo "message" > /proc/graceful_shutdown
+
+To read the file system:
+        sudo cat /proc/graceful_shutdown
+~                                         
