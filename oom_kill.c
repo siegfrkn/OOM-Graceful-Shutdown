@@ -347,7 +347,7 @@ static bool is_graceful_shutdown(int pid){
                 token = strsep(&buf, ",");
         }
         kfree(buf);
-        printk(KERN_INFO "PID %d not found in gs\n", test_pid);
+        printk(KERN_INFO "PID %d not found in gs\n", pid);
         return false;
 
 }
