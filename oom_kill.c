@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  *  linux/mm/oom_kill.c
- * 
+ *
  *  Copyright (C)  1998,2000  Rik van Riel
  *	Thanks go out to Claus Fischer for some serious inspiration and
  *	for goading me into coding this file...
@@ -53,6 +53,7 @@
 #include <linux/file.h>
 #include <linux/stat.h>
 #include <linux/limits.h>
+#include <linux/umh.h>
 
 #include <asm/tlb.h>
 #include "internal.h"
@@ -61,6 +62,8 @@
 #define MAX_BUFFER_SIZE 1000
 #define CREATE_TRACE_POINTS
 #include <trace/events/oom.h>
+
+#define PATH "/home/dylan/Desktop/csci5573-project/kernel_space_invocation/example_program.o"
 
 int sysctl_panic_on_oom;
 int sysctl_oom_kill_allocating_task;
@@ -363,11 +366,22 @@ static int oom_evaluate_task(struct task_struct *task, void *arg)
 	struct oom_control *oc = arg;
 	unsigned long points;
 	int pid;
+	int return_val;
+  static char *envp[] = {
+    "SHELL=/bin/bash",
+    "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    NULL
+  };
+	char *argv[2] = {PATH, NULL};
 	pid = (int)task->pid;
+	printk(KERN_ALERT"In oom_evaluate_task");
 
-	char *graceful_shutdown_path = get_graceful_shutdown_path(pid);
-	if (graceful_shutdown_path != NULL)
-		goto graceful_shutdown;
+	return_val = call_usermodehelper(argv[0], argv, envp, UMH_WAIT_PROC );
+
+	printk(KERN_ALERT"return val from usermodehelpere is: %d", return_val);
+	// char *graceful_shutdown_path = get_graceful_shutdown_path(pid);
+	// if (graceful_shutdown_path != NULL)
+	// 	goto graceful_shutdown;
 
 	if (oom_unkillable_task(task))
 		goto next;
