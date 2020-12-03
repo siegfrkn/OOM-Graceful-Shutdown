@@ -69,3 +69,12 @@ sudo systemctl daemon-reload && sudo systemctl enable cgconfigparser --now && su
 
 to apply rule changes without rebooting
 sudo systemctl restart cgconfigparser && sudo systemctl restart cgrulesgend
+
+
+/*
+RESOURCES:
+https://www.lesbonscomptes.com/recoll/faqsandhowtos/cgroups_instructions.html
+http://www.fernandoalmeida.net/blog/how-to-limit-cpu-and-memory-usage-with-cgroups-on-debian-ubuntu/
+https://linuxmedium.com/how-to-enable-etc-rc-local-with-systemd-on-ubuntu-20-04/
+https://unix.stackexchange.com/questions/34334/how-to-create-a-user-with-limited-ram-usage
+*/
