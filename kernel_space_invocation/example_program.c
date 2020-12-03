@@ -2,9 +2,7 @@
 #include <unistd.h>
 #include <limits.h>
 
-#define PATH "/home/dylanfox/Desktop/csci5573-project/kernel_space_invocation/"
-
-
+#define PATH "/home/dylan/Desktop/csci5573-project/kernel_space_invocation/"
 
 int main() {
   FILE *fp;
@@ -16,7 +14,7 @@ int main() {
        return 1;
    }
   fp = fopen(PATH"test.txt", "w+");
-  fprintf(fp, "%s\n", cwd);
+  fprintf(fp, "This is the directory of the program running: %s\n", cwd);
   fclose(fp);
   return 0;
 }
