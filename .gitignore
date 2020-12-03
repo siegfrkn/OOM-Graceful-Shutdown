@@ -1,0 +1,15 @@
+# Ignore txt files, they are output from test apps.
+*.txt
+
+# Build Artifacts
+*.o
+*.ko
+*.cmd
+*.mod
+*.mod.c
+*.symvers
+*.order
+
+# folder with old copies of oom_killer file.
+# used for local debugging / revision.
+old_oom_kill/*
