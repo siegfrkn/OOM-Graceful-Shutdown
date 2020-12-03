@@ -1,3 +1,5 @@
+ubuntu 20.04 adding a cgroup and init'ing with systemd
+
 sudo apt-get install cgroup-tools (need to select Yes)
 
 sudo vim /etc/default/grub
@@ -7,7 +9,7 @@ GRUB_CMDLINE_LINUX="quiet cgroup_enable=memory swapaccount=1"
 
 sudo update-grub
 
-to verify memory group has been added as cgroup
+to verify memory management has been enabled
 ls /sys/fs/cgroup/
 
 use template for global config to create a global config
@@ -16,15 +18,22 @@ sudo cp /usr/share/doc/cgroup-tools/examples/cgred.conf /etc/
 create file to specify groups
 sudo touch /etc/cgconfig.conf
 
-create file to allocate programs to groups
-sudo touch /etc/cgrules.conf
-
 edit file to create a group and limit the memory
 group memlimit {
     memory {
         memory.limit_in_bytes = 500000000;
     }
 }
+
+create file to allocate programs to groups
+sudo touch /etc/cgrules.conf
+
+edit file to apply roles to applications in group, something like
+*:emacs         cpu,memory      app/editor/
+*:conkeror      cpu,memory      app/browser/
+*:firefox       cpu,memory      app/browser/
+*:slack         cpu,memory      app/util/
+*:dropbox       cpu,memory      app/util/
 
 apply the rules
 sudo cgconfigparser -l /etc/cgconfig.conf && sudo cgrulesengd
@@ -66,6 +75,9 @@ WantedBy=multi-user.target
 
 then run
 sudo systemctl daemon-reload && sudo systemctl enable cgconfigparser --now && sudo systemctl enable cgrulesgend --now
+
+to view the group and verify it has been created and is handling memory management
+ls /sys/fs/cgroup/memory/
 
 to apply rule changes without rebooting
 sudo systemctl restart cgconfigparser && sudo systemctl restart cgrulesgend
