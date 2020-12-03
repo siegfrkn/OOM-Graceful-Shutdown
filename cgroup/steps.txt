@@ -1,0 +1,71 @@
+sudo apt-get install cgroup-tools (need to select Yes)
+
+sudo vim /etc/default/grub
+
+# Uncomment to enable memory management
+GRUB_CMDLINE_LINUX="quiet cgroup_enable=memory swapaccount=1"
+
+sudo update-grub
+
+to verify memory group has been added as cgroup
+ls /sys/fs/cgroup/
+
+use template for global config to create a global config
+sudo cp /usr/share/doc/cgroup-tools/examples/cgred.conf /etc/
+
+create file to specify groups
+sudo touch /etc/cgconfig.conf
+
+create file to allocate programs to groups
+sudo touch /etc/cgrules.conf
+
+edit file to create a group and limit the memory
+group memlimit {
+    memory {
+        memory.limit_in_bytes = 500000000;
+    }
+}
+
+apply the rules
+sudo cgconfigparser -l /etc/cgconfig.conf && sudo cgrulesengd
+
+check the rules
+sudo cgget -g memory:memlimit
+
+
+create a systemd file apply rules to be parsed and applied at boot
+sudo touch /etc/systemd/system/cgconfigparser.service
+[Unit]
+Description=cgroup config parser
+After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/sbin/cgconfigparser -l /etc/cgconfig.conf
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target
+
+and create another systemd file for the rules
+[Unit]
+Description=cgroup rules generator
+After=network.target cgconfigparser.service
+
+[Service]
+User=root
+Group=root
+Type=forking
+EnvironmentFile=-/etc/cgred.conf
+ExecStart=/usr/sbin/cgrulesengd
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+then run
+sudo systemctl daemon-reload && sudo systemctl enable cgconfigparser --now && sudo systemctl enable cgrulesgend --now
+
+to apply rule changes without rebooting
+sudo systemctl restart cgconfigparser && sudo systemctl restart cgrulesgend
