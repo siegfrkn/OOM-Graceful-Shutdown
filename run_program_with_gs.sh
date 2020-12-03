@@ -1,3 +1,4 @@
+set -x
 if [ "$#" -ne 2 ]
   then
     echo "Usage ./run_program_with_gs.sh <program_path> <gs_executable_path>"
@@ -13,6 +14,5 @@ if [ "${2:0:1}" != "/" ]
     echo "Continuing, but if the gs path isn't absolute it won't work."
   fi
 
-current_dir=$(pwd)
 echo "Starting process ${1} with oom graceful shutdown procedure of: ${2}"
-sudo /bin/bash -c 'echo "$(echo $$) ${1}"  >> /proc/graceful_shutdown && exec ${2}' $1 $2
+sudo /bin/bash -c 'echo "$(echo $$) ${0}"  >> /proc/graceful_shutdown && exec ${1}' $2 $1
