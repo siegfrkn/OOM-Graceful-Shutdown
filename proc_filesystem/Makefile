@@ -8,5 +8,11 @@ obj-m += proc_create_module.o
 
 all:
 	sudo make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+
+install:
+	sudo insmod proc_create_module.ko
+remove:
+	sudo rmmod proc_create_module
+
 clean:
 	sudo make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
