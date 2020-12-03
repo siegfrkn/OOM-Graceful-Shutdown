@@ -14,7 +14,7 @@ int main() {
   while(1) {
     sleep(1);
     void* huge_leak = malloc(SIZE);
-    memset(huge_leak, "0", SIZE);
+    memset(huge_leak, '0', SIZE);
     printf("%lu bytes lost so far!\n", i * SIZE);
     i += 1;
   }

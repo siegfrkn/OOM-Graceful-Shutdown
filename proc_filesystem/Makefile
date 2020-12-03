@@ -9,10 +9,13 @@ obj-m += proc_create_module.o
 all:
 	sudo make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
 
-install:
+install: remove
 	sudo insmod proc_create_module.ko
+
+# && true supresses errors from the remove rule. Useful in top level
+# make file so that we can always try to remove the module before loading it.
 remove:
-	sudo rmmod proc_create_module
+	sudo rmmod proc_create_module && true
 
 clean:
 	sudo make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
