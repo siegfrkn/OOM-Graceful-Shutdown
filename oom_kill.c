@@ -350,6 +350,10 @@ static const char * get_graceful_shutdown_path(int pid){
                 int read_pid_as_int;
                 if (kstrtoint(read_pid, 10, &read_pid_as_int) == 0 && read_pid_as_int == pid){
                                 char *gs_path = strsep(&copy_line, " ");
+																int len_path = strlen(gs_path);
+																char* gs_path_return_string = kmalloc(len_path * sizeof(char), GFP_KERNEL);
+																strcpy(gs_path_return_string, gs_path);
+																kfree(buf);
                                 filp_close(f, NULL);
                                 return gs_path;
                 }
@@ -365,23 +369,6 @@ static int oom_evaluate_task(struct task_struct *task, void *arg)
 {
 	struct oom_control *oc = arg;
 	unsigned long points;
-	int pid;
-	int return_val;
-  static char *envp[] = {
-    "SHELL=/bin/bash",
-    "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
-    NULL
-  };
-	char *argv[2] = {PATH, NULL};
-	pid = (int)task->pid;
-	printk(KERN_ALERT"In oom_evaluate_task");
-
-	return_val = call_usermodehelper(argv[0], argv, envp, UMH_WAIT_PROC );
-
-	printk(KERN_ALERT"return val from usermodehelpere is: %d", return_val);
-	// char *graceful_shutdown_path = get_graceful_shutdown_path(pid);
-	// if (graceful_shutdown_path != NULL)
-	// 	goto graceful_shutdown;
 
 	if (oom_unkillable_task(task))
 		goto next;
@@ -415,10 +402,6 @@ static int oom_evaluate_task(struct task_struct *task, void *arg)
 	if (!points || points < oc->chosen_points)
 		goto next;
 
-graceful_shutdown:
-	//graceful shutdown process goes here
-	;
-
 select:
 	if (oc->chosen)
 		put_task_struct(oc->chosen);
@@ -440,16 +423,30 @@ abort:
  */
 static void select_bad_process(struct oom_control *oc)
 {
+	int return_val;
+	char *argv[2] = {NULL, NULL};
+	int pid;
+	char* gs_path;
+
 	if (is_memcg_oom(oc))
 		mem_cgroup_scan_tasks(oc->memcg, oom_evaluate_task, oc);
 	else {
 		struct task_struct *p;
-
 		rcu_read_lock();
 		for_each_process(p)
 			if (oom_evaluate_task(p, oc))
 				break;
 		rcu_read_unlock();
+		pid = (int)oc->chosen->pid;
+		printk(KERN_ALERT"OOM pid choosen, pid is: %d", pid);
+		gs_path = get_graceful_shutdown_path(pid);
+		printk(KERN_ALERT"gs_path for %d is: %s", pid, gs_path);
+		if (gs_path != NULL) {
+			argv[0] = gs_path;
+			return_val = call_usermodehelper(argv[0], argv, NULL, UMH_WAIT_PROC);
+			printk(KERN_ALERT"return val from usermodehelper is: %d", return_val);
+			kfree(gs_path);
+		}
 	}
 }
 
