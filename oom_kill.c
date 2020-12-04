@@ -321,19 +321,20 @@ static enum oom_constraint constrained_alloc(struct oom_control *oc)
 	return CONSTRAINT_NONE;
 }
 
-static const char * get_graceful_shutdown_path(int pid){
+static char * get_graceful_shutdown_path(int pid){
         char *file_path = "/proc/graceful_shutdown";
         struct file *f;
+				char *buf = kmalloc(MAX_BUFFER_SIZE, GFP_KERNEL);
+        int len = kernel_read(f, buf, MAX_BUFFER_SIZE - 1, &f->f_pos);
+				int len_path, read_pid_as_int;
+				char *single_line;
+				char *gs_path_return_string;
+
         f = filp_open(file_path, O_RDONLY, 0666);
         if (IS_ERR(f)){
                 printk(KERN_ERR "%s can not be opened.\n", file_path);
                 return NULL;
         }
-
-        char *buf;
-        buf = kmalloc(MAX_BUFFER_SIZE, GFP_KERNEL);
-        int len;
-        len = kernel_read(f, buf, MAX_BUFFER_SIZE - 1, &f->f_pos);
 
         if (len == 0){
                 printk(KERN_ERR "Could not read %s\n", file_path);
@@ -342,27 +343,25 @@ static const char * get_graceful_shutdown_path(int pid){
                 return NULL;
         }
 
-        char *single_line = strsep(&buf, "\n");
-
+        single_line = strsep(&buf, "\n");
         while(single_line != NULL){
-                char *copy_line = single_line;
-                char *read_pid = strsep(&copy_line, " ");
-                int read_pid_as_int;
-                if (kstrtoint(read_pid, 10, &read_pid_as_int) == 0 && read_pid_as_int == pid){
-                                char *gs_path = strsep(&copy_line, " ");
-																int len_path = strlen(gs_path);
-																char* gs_path_return_string = kmalloc(len_path * sizeof(char), GFP_KERNEL);
-																strcpy(gs_path_return_string, gs_path);
+                single_line = strsep(&single_line, " ");
+                if (kstrtoint(single_line, 10, &read_pid_as_int) == 0 && read_pid_as_int == pid){
+                                single_line = strsep(&single_line, " ");
+																len_path = strlen(single_line);
+																gs_path_return_string = kmalloc(len_path * sizeof(char), GFP_KERNEL);
+																strcpy(gs_path_return_string, single_line);
 																kfree(buf);
                                 filp_close(f, NULL);
-                                return gs_path;
+                                return gs_path_return_string;
                 }
                 single_line = strsep(&buf, "\n");
         }
+
+				// test of make file
         filp_close(f, NULL);
         kfree(buf);
         return NULL;
-
 }
 
 static int oom_evaluate_task(struct task_struct *task, void *arg)
