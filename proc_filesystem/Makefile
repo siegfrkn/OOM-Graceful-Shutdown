@@ -15,7 +15,7 @@ install: remove
 # && true supresses errors from the remove rule. Useful in top level
 # make file so that we can always try to remove the module before loading it.
 remove:
-	sudo rmmod proc_create_module && true
+	-sudo rmmod proc_create_module 
 
 clean:
 	sudo make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
