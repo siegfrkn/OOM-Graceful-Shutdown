@@ -14,7 +14,7 @@ This has only been tested on ubuntu 20.04 using kernel version 5.4.x. Kernel ver
 If you are installing this on a fresh VM, use the shell script ```setup_new_vm.sh``` to download the kernel source and install necessary packages. After runningthis script, you should have a directory at ```/usr/src/linux-5.4.1/``` with the source code of the kernel in it. Then run the make file in the top level directory. If your kernel is located at a different location than ```/usr/src/linux-5.4.1/```, change the file path in the first line of the top level makefile. This makefile patches the oom_kill.c source code into the kernel and the re-compiles the kernel. It auto-detects how many cores you have on your machine and uses all of them for the compilation of the kernel. Since this is recompiling the entire linux kernel, it may take a while. On a 6 core VM with 12 gbs of RAM and an SSD, it takes a minute or two, but on a single core machine with small amounts of ram it may take an hour or more. After the kernel recompiles, restart you machine and select the new kernel from the GRUB menu while you are restarting.
 
 Once the kernel has been launched, the following script will need to be executed only once to set the cgroups and the proc file system to run at boot.
-./setup_initial_running_env.sh
+```./setup_initial_running_env.sh```
 We will need to decide where this gets copied over and then run.
 
 ## Testing
