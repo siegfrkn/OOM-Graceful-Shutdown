@@ -6,6 +6,11 @@ if [[ $(/usr/bin/id -u) -ne 0 ]]; then
     exit
 fi
 
+# empty the files so we aren't appending infinitely
+echo "Clearing out systemd files....."
+echo "" > /etc/systemd/system/cgconfigparser.service
+echo "" > /etc/systemd/system/cgrulesparser.service
+
 # add the lkm for the proc directory to run at boot every time
 echo "Setting /proc/graceful_shutdown to initialize on every boot....." &&
 echo 'proc_create_module ' >> /etc/modules &&
@@ -16,7 +21,7 @@ echo '# Uncomment to enable memory management' >> /etc/default/grub &&
 echo 'GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"' >> /etc/default/grub &&
 sudo update-grub &&
 sudo touch /etc/default/grub.d/mem_cgroup
-echo cgroup/cgroup_grub >> /etc/default/grub.d
+echo cgroup/cgroup_grub >> /etc/default/grub.d/mem_group
 
 #use template for global config to create a global config
 sudo cp /usr/share/doc/cgroup-tools/examples/cgred.conf /etc/ &&
