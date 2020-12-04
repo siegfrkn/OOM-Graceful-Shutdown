@@ -325,7 +325,7 @@ static char * get_graceful_shutdown_path(int pid){
         char *file_path = "/proc/graceful_shutdown";
         struct file *f;
 				char *buf = kmalloc(MAX_BUFFER_SIZE, GFP_KERNEL);
-        int len = kernel_read(f, buf, MAX_BUFFER_SIZE - 1, &f->f_pos);
+        int len;
 				int len_path, read_pid_as_int;
 				char *single_line;
 				char *gs_path_return_string;
@@ -336,6 +336,7 @@ static char * get_graceful_shutdown_path(int pid){
                 return NULL;
         }
 
+				len = kernel_read(f, buf, MAX_BUFFER_SIZE - 1, &f->f_pos);
         if (len == 0){
                 printk(KERN_ERR "Could not read %s\n", file_path);
                 filp_close(f, NULL);
@@ -357,8 +358,7 @@ static char * get_graceful_shutdown_path(int pid){
                 }
                 single_line = strsep(&buf, "\n");
         }
-
-				// test of make file
+				
         filp_close(f, NULL);
         kfree(buf);
         return NULL;
