@@ -27,7 +27,7 @@ cat cgroup/cgroup_cgconfig.conf >> /etc/cgconfig.conf &&
 
 # create file to allocate programs to groups
 sudo touch /etc/cgrules.conf &&
-cat cgroup/cgroup_rules.conf >> /etc/cgrules.conf &&
+cat cgroup/cgroup_cgrules.conf >> /etc/cgrules.conf &&
 
 # apply the rules, this needs to happen after all the above
 sudo cgconfigparser -l /etc/cgconfig.conf &&
@@ -38,10 +38,10 @@ echo "Setting up cgroups to start at boot....." &&
 sudo touch /etc/systemd/system/cgconfigparser.service &&
 cat cgroup/cgroup_systemd_config >> /etc/systemd/system/cgconfigparser.service &&
 sudo touch /etc/systemd/system/cgrulesparser.service &&
-cat cgroup/cgroup_systemd_rules >> /etc/systemd/system/cgrulesparser.service &&
+cat cgroup/cgroup_systemd_rules >> /etc/systemd/system/cgrulesengd.service &&
 
 # restart systemctl to apply the changes above
 sudo systemctl daemon-reload &&
 sudo systemctl enable cgconfigparser --now &&
-sudo systemctl enable cgrulesgend --now
+sudo systemctl enable cgrulesengd --now
 
