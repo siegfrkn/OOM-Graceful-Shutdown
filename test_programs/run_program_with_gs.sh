@@ -1,5 +1,6 @@
-#set -x
+set -x
 CGROUP_NAME="memlimit"
+FAKE_PROC_FILE_PATH="/home/dylan/Desktop/proc_gs.txt"
 
 if [ "$#" -ne 2 ]
   then
@@ -17,4 +18,5 @@ if [ "${2:0:1}" != "/" ]
   fi
 
 echo "Starting process ${1} with oom graceful shutdown procedure of: ${2}"
-sudo /bin/bash -c 'echo "$(echo $$) ${0}"  >> /proc/graceful_shutdown && cgexec -g memory:${1} ${2}' $2 $CGROUP_NAME $1
+sudo /bin/bash -c 'echo "$(echo $$) ${0}"  >> ${1} && cgexec -g memory:${2} ${3}' \
+$2 $FAKE_PROC_FILE_PATH $CGROUP_NAME $1
