@@ -325,10 +325,9 @@ static char * get_graceful_shutdown_path(int pid){
         char *file_path = "/proc/graceful_shutdown";
         struct file *f;
 				char *buf = kmalloc(MAX_BUFFER_SIZE, GFP_KERNEL);
-        int len = kernel_read(f, buf, MAX_BUFFER_SIZE - 1, &f->f_pos);
+        int len;
 				int len_path, read_pid_as_int;
-				char *single_line;
-				char *gs_path_return_string;
+				char *single_line, *pid_str, *path_string, *gs_path_return_string, *buff_copy;
 
         f = filp_open(file_path, O_RDONLY, 0666);
         if (IS_ERR(f)){
@@ -336,31 +335,34 @@ static char * get_graceful_shutdown_path(int pid){
                 return NULL;
         }
 
+				len = kernel_read(f, buf, MAX_BUFFER_SIZE - 1, &f->f_pos);
         if (len == 0){
                 printk(KERN_ERR "Could not read %s\n", file_path);
                 filp_close(f, NULL);
                 kfree(buf);
                 return NULL;
         }
-
+				buff_copy = buf;
         single_line = strsep(&buf, "\n");
+				printk(KERN_ALERT"single line is: %s", single_line);
         while(single_line != NULL){
-                single_line = strsep(&single_line, " ");
-                if (kstrtoint(single_line, 10, &read_pid_as_int) == 0 && read_pid_as_int == pid){
-                                single_line = strsep(&single_line, " ");
-																len_path = strlen(single_line);
+                pid_str = strsep(&single_line, " ");
+								printk(KERN_ALERT"pid_str is : %s", pid_str);
+                if (kstrtoint(pid_str, 10, &read_pid_as_int) == 0 && read_pid_as_int == pid){
+                                path_string = strsep(&single_line, " ");
+																printk(KERN_ALERT"string in path: %s", path_string);
+																len_path = strlen(path_string);
 																gs_path_return_string = kmalloc(len_path * sizeof(char), GFP_KERNEL);
-																strcpy(gs_path_return_string, single_line);
-																kfree(buf);
+																strcpy(gs_path_return_string, path_string);
+																kfree(buff_copy);
                                 filp_close(f, NULL);
                                 return gs_path_return_string;
                 }
                 single_line = strsep(&buf, "\n");
         }
-
 				// test of make file
         filp_close(f, NULL);
-        kfree(buf);
+        kfree(buff_copy);
         return NULL;
 }
 
@@ -436,6 +438,7 @@ static void select_bad_process(struct oom_control *oc)
 			if (oom_evaluate_task(p, oc))
 				break;
 		rcu_read_unlock();
+		}
 		pid = (int)oc->chosen->pid;
 		printk(KERN_ALERT"OOM pid choosen, pid is: %d", pid);
 		gs_path = get_graceful_shutdown_path(pid);
@@ -445,7 +448,6 @@ static void select_bad_process(struct oom_control *oc)
 			return_val = call_usermodehelper(argv[0], argv, NULL, UMH_WAIT_PROC);
 			printk(KERN_ALERT"return val from usermodehelper is: %d", return_val);
 			kfree(gs_path);
-		}
 	}
 }
 
