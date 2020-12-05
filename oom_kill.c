@@ -358,7 +358,7 @@ static char * get_graceful_shutdown_path(int pid){
                 }
                 single_line = strsep(&buf, "\n");
         }
-				
+
         filp_close(f, NULL);
         kfree(buf);
         return NULL;
@@ -436,6 +436,7 @@ static void select_bad_process(struct oom_control *oc)
 			if (oom_evaluate_task(p, oc))
 				break;
 		rcu_read_unlock();
+		}
 		pid = (int)oc->chosen->pid;
 		printk(KERN_ALERT"OOM pid choosen, pid is: %d", pid);
 		gs_path = get_graceful_shutdown_path(pid);
@@ -445,7 +446,6 @@ static void select_bad_process(struct oom_control *oc)
 			return_val = call_usermodehelper(argv[0], argv, NULL, UMH_WAIT_PROC);
 			printk(KERN_ALERT"return val from usermodehelper is: %d", return_val);
 			kfree(gs_path);
-		}
 	}
 }
 
