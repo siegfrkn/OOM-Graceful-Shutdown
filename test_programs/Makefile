@@ -9,4 +9,4 @@ all: $(PROGS)
 	$(CC) -o $@ $<
 
 clean:
-	rm -f *.o
+	rm -f $(PROGS)

@@ -20,7 +20,7 @@ cd - &&
 
 # add the lkm for the proc directory to run at boot every time
 echo "Setting /proc/graceful_shutdown to initialize on every boot....." &&
-echo 'proc_create_module ' >> /etc/modules &&
+echo 'proc_create_module ' >> /etc/modules-load.d/modules.conf &&
 
 # enable the memory management if not already enabled
 echo "Setting up graceful_shutdown cgroups....." &&
