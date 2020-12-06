@@ -9,7 +9,14 @@ fi
 # empty the files so we aren't appending infinitely
 echo "Clearing out systemd files....."
 echo "" > /etc/systemd/system/cgconfigparser.service
-echo "" > /etc/systemd/system/cgrulesparser.service
+echo "" > /etc/systemd/system/cgrulesengd.service
+
+# insert the proc module
+echo "Create the /proc/graceful_shutdown dir....." &&
+cd proc_filesystem &&
+make all &&
+make install &&
+cd - &&
 
 # add the lkm for the proc directory to run at boot every time
 echo "Setting /proc/graceful_shutdown to initialize on every boot....." &&
