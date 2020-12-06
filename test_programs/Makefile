@@ -1,9 +1,9 @@
 CC := gcc
 
 SRC_FILES := $(wildcard *.c)
-OBJ_FILES := $(patsubst %.c,%.o,$(SRC_FILES))
+PROGS := $(patsubst %.c,%,$(SRC_FILES))
 
-all: $(OBJ_FILES)
+all: $(PROGS)
 
 %.o: %.c
 	$(CC) -o $@ $<

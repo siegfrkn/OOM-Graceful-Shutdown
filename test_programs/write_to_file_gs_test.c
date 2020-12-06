@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <limits.h>
 
-#define PATH "/home/dylan/Desktop/csci5573-project/kernel_space_invocation/"
+#define PATH "./kernel_space_invocation/"
 
 int main() {
   FILE *fp;
