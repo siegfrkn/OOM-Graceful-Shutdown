@@ -327,8 +327,7 @@ static char * get_graceful_shutdown_path(int pid){
 				char *buf = kmalloc(MAX_BUFFER_SIZE, GFP_KERNEL);
         int len;
 				int len_path, read_pid_as_int;
-				char *single_line;
-				char *gs_path_return_string;
+				char *single_line, *pid_str, *path_string, *gs_path_return_string, *buff_copy;
 
         f = filp_open(file_path, O_RDONLY, 0666);
         if (IS_ERR(f)){
@@ -343,24 +342,26 @@ static char * get_graceful_shutdown_path(int pid){
                 kfree(buf);
                 return NULL;
         }
-
+				buff_copy = buf;
         single_line = strsep(&buf, "\n");
+				printk(KERN_ALERT"single line is: %s", single_line);
         while(single_line != NULL){
-                single_line = strsep(&single_line, " ");
-                if (kstrtoint(single_line, 10, &read_pid_as_int) == 0 && read_pid_as_int == pid){
-                                single_line = strsep(&single_line, " ");
-																len_path = strlen(single_line);
+                pid_str = strsep(&single_line, " ");
+								printk(KERN_ALERT"pid_str is : %s", pid_str);
+                if (kstrtoint(pid_str, 10, &read_pid_as_int) == 0 && read_pid_as_int == pid){
+                                path_string = strsep(&single_line, " ");
+																printk(KERN_ALERT"string in path: %s", path_string);
+																len_path = strlen(path_string);
 																gs_path_return_string = kmalloc(len_path * sizeof(char), GFP_KERNEL);
-																strcpy(gs_path_return_string, single_line);
-																kfree(buf);
+																strcpy(gs_path_return_string, path_string);
+																kfree(buff_copy);
                                 filp_close(f, NULL);
                                 return gs_path_return_string;
                 }
                 single_line = strsep(&buf, "\n");
         }
-
         filp_close(f, NULL);
-        kfree(buf);
+        kfree(buff_copy);
         return NULL;
 }
 

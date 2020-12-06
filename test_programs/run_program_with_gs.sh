@@ -18,5 +18,6 @@ if [ "${2:0:1}" != "/" ]
   fi
 
 echo "Starting process ${1} with oom graceful shutdown procedure of: ${2}"
-sudo /bin/bash -c 'echo "$(echo $$) ${0}"  >> ${1} && cgexec -g memory:${2} ${3}' \
-$2 $FAKE_PROC_FILE_PATH $CGROUP_NAME $1
+
+sudo /bin/bash -c 'echo "$(echo $$) ${0}"  >> /proc/graceful_shutdown && cgexec -g memory:memlimit ${1}' $2 $1
+

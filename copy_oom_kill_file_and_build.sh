@@ -1,3 +1,4 @@
+set -x
 if [ "$#" -ne 1 ]
   then
     echo "Usage ./copy_oom_kill_file_and_build.sh <linux_source_path>"
@@ -9,7 +10,7 @@ if [ "$#" -ne 1 ]
 mkdir -p old_oom_kill/
 
 num_old_files=$(ls -1 old_oom_kill/ | wc -l)
-sudo mv "${1}/mm/oom_kill.c" "./old_oom_kill/oom_kill.c-${num_old_files}" &>/dev/null
+sudo mv "${1}/mm/oom_kill.c" "./old_oom_kill/oom_kill.c-${num_old_files}" || true
 
 sudo cp oom_kill.c "${1}/mm/"
 
