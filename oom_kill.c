@@ -360,7 +360,6 @@ static char * get_graceful_shutdown_path(int pid){
                 }
                 single_line = strsep(&buf, "\n");
         }
-				// test of make file
         filp_close(f, NULL);
         kfree(buff_copy);
         return NULL;

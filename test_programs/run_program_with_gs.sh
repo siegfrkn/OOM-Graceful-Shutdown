@@ -1,4 +1,7 @@
 set -x
+CGROUP_NAME="memlimit"
+FAKE_PROC_FILE_PATH="/home/dylan/Desktop/proc_gs.txt"
+
 if [ "$#" -ne 2 ]
   then
     echo "Usage ./run_program_with_gs.sh <program_path> <gs_executable_path>"
@@ -15,4 +18,6 @@ if [ "${2:0:1}" != "/" ]
   fi
 
 echo "Starting process ${1} with oom graceful shutdown procedure of: ${2}"
+
 sudo /bin/bash -c 'echo "$(echo $$) ${0}"  >> /proc/graceful_shutdown && cgexec -g memory:memlimit ${1}' $2 $1
+
