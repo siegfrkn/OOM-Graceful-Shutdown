@@ -429,6 +429,7 @@ static void select_bad_process(struct oom_control *oc)
 	char *argv[2] = {NULL, NULL};
 	int pid;
 	char* gs_path;
+	long start_gs, end_gs, diff_gs;
 
 	if (is_memcg_oom(oc))
 		mem_cgroup_scan_tasks(oc->memcg, oom_evaluate_task, oc);
@@ -443,7 +444,7 @@ static void select_bad_process(struct oom_control *oc)
 		}
 
 		/* setup the timer dmesg output for quantifying graceful_shutdown */
-		long start_gs = ktime_get_ns();
+		start_gs = ktime_get_ns();
 		printk("oom timer: start at %ld\n", start_gs);
 
 		pid = (int)oc->chosen->pid;
@@ -459,9 +460,9 @@ static void select_bad_process(struct oom_control *oc)
 		}
 
 		/* get ending timer for graceful shutdown and calculate diff */
-		long end_gs = ktime_get_ns();
+		end_gs = ktime_get_ns();
 		printk("oom timer: end at %ld\n", end_gs);
-		long diff_gs = start_gs - end_gs;
+		diff_gs = start_gs - end_gs;
 		printk("oom timer: gs diff %ld\n", diff_gs);
 }
 
