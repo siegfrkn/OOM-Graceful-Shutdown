@@ -7,6 +7,9 @@
  *	for goading me into coding this file...
  *  Copyright (C)  2010  Google, Inc.
  *	Rewritten by David Rientjes
+ * 
+ *  Additional modifications for graceful_shutdown made by Ravindra
+ *  Mangar, Dylan Fox, and Katrina Siegfried, GPL 2020.
  *
  *  The routines in this file are used to kill a process when
  *  we're seriously out of memory. This gets called from __alloc_pages()
@@ -54,6 +57,7 @@
 #include <linux/stat.h>
 #include <linux/limits.h>
 #include <linux/umh.h>
+#include <linux/timekeeping.h>
 
 #include <asm/tlb.h>
 #include "internal.h"
@@ -62,8 +66,6 @@
 #define MAX_BUFFER_SIZE 1000
 #define CREATE_TRACE_POINTS
 #include <trace/events/oom.h>
-
-#define PATH "/home/dylan/Desktop/csci5573-project/kernel_space_invocation/example_program.o"
 
 int sysctl_panic_on_oom;
 int sysctl_oom_kill_allocating_task;
@@ -350,11 +352,11 @@ static char * get_graceful_shutdown_path(int pid){
 								printk(KERN_ALERT"pid_str is : %s", pid_str);
                 if (kstrtoint(pid_str, 10, &read_pid_as_int) == 0 && read_pid_as_int == pid){
                                 path_string = strsep(&single_line, " ");
-																printk(KERN_ALERT"string in path: %s", path_string);
-																len_path = strlen(path_string);
-																gs_path_return_string = kmalloc(len_path * sizeof(char), GFP_KERNEL);
-																strcpy(gs_path_return_string, path_string);
-																kfree(buff_copy);
+								printk(KERN_ALERT"string in path: %s", path_string);
+								len_path = strlen(path_string);
+								gs_path_return_string = kmalloc(len_path * sizeof(char), GFP_KERNEL);
+								strcpy(gs_path_return_string, path_string);
+								kfree(buff_copy);
                                 filp_close(f, NULL);
                                 return gs_path_return_string;
                 }
@@ -430,7 +432,8 @@ static void select_bad_process(struct oom_control *oc)
 
 	if (is_memcg_oom(oc))
 		mem_cgroup_scan_tasks(oc->memcg, oom_evaluate_task, oc);
-	else {
+	else
+	{
 		struct task_struct *p;
 		rcu_read_lock();
 		for_each_process(p)
@@ -438,16 +441,28 @@ static void select_bad_process(struct oom_control *oc)
 				break;
 		rcu_read_unlock();
 		}
+
+		/* setup the timer dmesg output for quantifying graceful_shutdown */
+		long start_gs = ktime_get_ns();
+		printk("oom timer: start at %ld\n", start_gs);
+
 		pid = (int)oc->chosen->pid;
 		printk(KERN_ALERT"OOM pid choosen, pid is: %d", pid);
 		gs_path = get_graceful_shutdown_path(pid);
 		printk(KERN_ALERT"gs_path for %d is: %s", pid, gs_path);
-		if (gs_path != NULL) {
+		if (gs_path != NULL)
+		{
 			argv[0] = gs_path;
 			return_val = call_usermodehelper(argv[0], argv, NULL, UMH_WAIT_PROC);
 			printk(KERN_ALERT"return val from usermodehelper is: %d", return_val);
 			kfree(gs_path);
-	}
+		}
+
+		/* get ending timer for graceful shutdown and calculate diff */
+		long end_gs = ktime_get_ns();
+		printk("oom timer: end at %ld\n", end_gs);
+		long diff_gs = start_gs - end_gs;
+		printk("oom timer: gs diff %ld\n", diff_gs);
 }
 
 static int dump_task(struct task_struct *p, void *arg)
