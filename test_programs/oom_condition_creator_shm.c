@@ -58,7 +58,7 @@ int main()
     memset(huge_leak, '0', SIZE);
     printf("%lu bytes lost so far!\n", i * SIZE);
     fflush ( stdout );
-    sprintf(message, "%ld", i);
+    sprintf(message, "This is a string written to a region of shared memory.\n");
     i += 1;
   }
   return 0;
