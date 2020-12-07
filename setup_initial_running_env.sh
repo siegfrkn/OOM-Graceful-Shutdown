@@ -58,5 +58,5 @@ sudo systemctl enable cgconfigparser --now &&
 sudo systemctl enable cgrulesengd --now &&
 
 # setup complete
-echo "Graceful shutdown environment complete!"
+echo "Graceful shutdown environment setup complete!"
 
