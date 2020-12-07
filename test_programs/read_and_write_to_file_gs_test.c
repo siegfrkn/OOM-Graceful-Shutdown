@@ -39,5 +39,8 @@ void main()
     printf("\n");
     fprintf(fp_write, "\n");
 
+    fclose(fp_read);
+    fclose(fp_write);
+
     return;
 }
