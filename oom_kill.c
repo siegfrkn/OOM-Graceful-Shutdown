@@ -462,7 +462,7 @@ static void select_bad_process(struct oom_control *oc)
 		/* get ending timer for graceful shutdown and calculate diff */
 		end_gs = ktime_get_ns();
 		printk("oom timer: end at %ld nanoseconds\n", end_gs);
-		diff_gs = (end_gs - start_gs) * 1000000000;
+		diff_gs = (end_gs - start_gs) / 1000000000;
 		printk("oom timer: gs diff %ld seconds\n", diff_gs);
 }
 
