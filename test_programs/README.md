@@ -23,6 +23,7 @@ where both the ```<oom watch file>``` and the ```<graceful shutdown file``` are 
 Finally, the script will execute the ```<oom watch file>``` in the limited memory cgroup, which contains large memory leaks so that there is still memory for the graceful shutdown file to run in.
 
 ## OOM Condition Creator Program
+This is the file that is used for the test programs to create out of memory conditions. This file begins and then waits for the user to press the ```Enter``` key so that during testing there is enough time for the user to inspect the PID of the created process. Once the user presses the ```Enter``` key, the file will allocate very large blocks of memory infinitely. This will eventually cause the OOM condition to occur.
 
 ## Testing File Create/Write
 
