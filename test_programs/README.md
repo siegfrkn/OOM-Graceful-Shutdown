@@ -26,6 +26,14 @@ Finally, the script will execute the ```<oom watch file>``` in the limited memor
 This is the file that is used for the test programs to create out of memory conditions. This file begins and then waits for the user to press the ```Enter``` key so that during testing there is enough time for the user to inspect the PID of the created process. Once the user presses the ```Enter``` key, the file will allocate very large blocks of memory infinitely. This will eventually cause the OOM condition to occur.
 
 ## Testing File Create/Write
+This test uses the program ```write_to_file_gs``` as the graceful shutdown program. When called, it creates a file named "graceful_shutdown_output.txt" in the ```test_programs``` directory with a simple sentence within. The path and name of the file are hardcoded inside of the test file, so in order to change this path to match your own user directory you must open the source file, edit, close, and re-make before executing. The command to execute this file will need to look something like the following:
+
+```./run_program_with_gs.sh /<full>/<file>/<path>/Project/csci5573-project/test_programs/oom_condition_creator /<full>/<file>/<path>/Project/csci5573-project/test_programs/write_to_file_gs_test```
+
+The program will start the ```oom_condition_creator``` program and pause and wait for the user to press ```Enter```. After that, the program will start allocating large blocks of memory until an OOM condition is created and the program is marked for shutdown. It will then call and execute the ```write_to_file_gs``` program which will create a file, "graceful_shutdown_output.txt" in the ```test_programs``` directory, which contains the following text:
+
+"The oom killer was invoked, and this is a file generated as a result of the graceful shutdown"
+
 
 ## Testing File Read and Write
 
