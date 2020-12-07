@@ -22,7 +22,7 @@ echo "Waiting for both jobs to finish...."
 wait $(jobs -p)
 echo "Replace defconfig with custom config file...."
 cd "$LINUX_SRC_DIR" && sudo make defconfig &>/dev/null
-cd - && sudo cp kernel.config $LINUX_SRC_DIR/.config
+cd - && sudo cp kernel.config $LINUX_SRC_DIR/.config &&
 
-&& echo "New VM setup complete!"
+echo "New VM setup complete!" &&
 sync

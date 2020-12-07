@@ -55,5 +55,8 @@ cat cgroup/cgroup_systemd_rules >> /etc/systemd/system/cgrulesengd.service &&
 # restart systemctl to apply the changes above
 sudo systemctl daemon-reload &&
 sudo systemctl enable cgconfigparser --now &&
-sudo systemctl enable cgrulesengd --now
+sudo systemctl enable cgrulesengd --now &&
+
+# setup complete
+echo "Graceful shutdown environment complete!"
 

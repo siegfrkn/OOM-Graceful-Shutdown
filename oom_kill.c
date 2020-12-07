@@ -445,7 +445,7 @@ static void select_bad_process(struct oom_control *oc)
 
 		/* setup the timer dmesg output for quantifying graceful_shutdown */
 		start_gs = ktime_get_ns();
-		printk("oom timer: start at %ld\n", start_gs);
+		printk("oom timer: start at %ld\n nanoseconds", start_gs);
 
 		pid = (int)oc->chosen->pid;
 		printk(KERN_ALERT"OOM pid choosen, pid is: %d", pid);
@@ -461,9 +461,9 @@ static void select_bad_process(struct oom_control *oc)
 
 		/* get ending timer for graceful shutdown and calculate diff */
 		end_gs = ktime_get_ns();
-		printk("oom timer: end at %ld\n", end_gs);
-		diff_gs = start_gs - end_gs;
-		printk("oom timer: gs diff %ld\n", diff_gs);
+		printk("oom timer: end at %ld nanoseconds\n", end_gs);
+		diff_gs = (end_gs - start_gs) * 1000000000;
+		printk("oom timer: gs diff %ld seconds\n", diff_gs);
 }
 
 static int dump_task(struct task_struct *p, void *arg)
