@@ -7,6 +7,8 @@ The files in this directory are used to exercise and demonstrate the capabilitie
 
 ## Testing File Create/Write
 
+## Testing File Read and Write
+
 ## Testing Server Connectivity
 
 ## Testing Access to Shared Data
