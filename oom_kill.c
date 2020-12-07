@@ -463,7 +463,7 @@ static void select_bad_process(struct oom_control *oc)
 		end_gs = ktime_get_ns();
 		printk("oom timer: end at %ld nanoseconds\n", end_gs);
 		diff_gs_ns = (end_gs - start_gs) / 1000000000;
-		printk("oom timer: gs diff %ld seconds\n", diff_gs_ns);
+		printk("oom timer: gs diff %ld nanoseconds\n", diff_gs_ns);
 		diff_gs_sec = end_gs - start_gs;
 		printk("oom timer: gs diff %ld seconds\n", diff_gs_sec);
 }
