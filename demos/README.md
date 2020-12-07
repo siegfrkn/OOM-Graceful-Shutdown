@@ -1,5 +1,5 @@
 # Explanation of Demo Files
-The demo videos are screen recordings which do not have accompanying audio. To enhance understanding of what is being performed in the demo, detailed descriptions have been added here.
+The demo videos are screen recordings which do not have accompanying audio. To enhance understanding of what is being performed in the demo, detailed descriptions have been added here. If there are issues viewing the demo recordings, please contact the authors for a copy.
 
 ### Simple Graceful Shutdown Demo
 The simple graceful shutdown video demonstrates the basic functionality of the graceful shutdown implementation.
