@@ -59,15 +59,25 @@ The program will start the ```oom_condition_creator``` program and pause and wai
 The program will start the ```oom_condition_creator``` program and pause and wait for the user to press ```Enter```. After that, the program will start allocating large blocks of memory until an OOM condition is created and the program is marked for shutdown. It will then call and execute the ```write_to_file_gs``` program which will create a file, "ping_output_gs.txt" in the ```test_programs``` directory, which contains somethig similar to the the following text:
 
 ```PING OUTPUT FROM GRACEFUL SHUTDOWN TEST```
+
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=1 ttl=64 rtt = 26.602555 ms.```
+
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=2 ttl=64 rtt = 28.284108 ms.```
+
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=3 ttl=64 rtt = 25.787927 ms.```
+
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=4 ttl=64 rtt = 23.470388 ms.```
+
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=5 ttl=64 rtt = 36.908389 ms.```
+
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=6 ttl=64 rtt = 23.713488 ms.```
+
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=7 ttl=64 rtt = 24.359937 ms.```
+
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=8 ttl=64 rtt = 24.107772 ms.```
+
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=9 ttl=64 rtt = 24.311721 ms.```
+
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=10 ttl=64 rtt = 23.276582 ms.```
 
 
