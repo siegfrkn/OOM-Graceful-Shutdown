@@ -81,4 +81,12 @@ The program will start the ```oom_condition_creator``` program and pause and wai
 ```64 bytes from den02s01-in-f14.1e100.net (h: google.com) (172.217.11.238) msg_seq=10 ttl=64 rtt = 23.276582 ms.```
 
 
+## Testing Tiny Execution
+This test uses the program ```tiny``` as the graceful shutdown program. When called, it simply returns the number 100 from its main execution loop.
+
+```./run_program_with_gs.sh /<full>/<file>/<path>/Project/csci5573-project/test_programs/oom_condition_creator /<full>/<file>/<path>/Project/csci5573-project/test_programs/tiny```
+
+The program will start the ```oom_condition_creator``` program and pause and wait for the user to press ```Enter```. After that, the program will start allocating large blocks of memory until an OOM condition is created and the program is marked for shutdown. It will then call and execute the ```tiny``` program which will return 100 and exit.
+
+
 ## Testing Access to Shared Data
