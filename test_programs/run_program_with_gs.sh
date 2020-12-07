@@ -1,6 +1,6 @@
 set -x
 CGROUP_NAME="memlimit"
-FAKE_PROC_FILE_PATH="/home/dylan/Desktop/proc_gs.txt"
+FAKE_PROC_FILE_PATH="/home/katrina/Desktop/proc_gs.txt"
 
 if [ "$#" -ne 2 ]
   then

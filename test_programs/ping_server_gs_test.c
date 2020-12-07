@@ -24,7 +24,7 @@
 #define PORT_NO 0  
   
 // Automatic port number 
-#define PING_SLEEP_RATE 100000
+#define PING_SLEEP_RATE 10000
   
 // Gives the timeout delay for receiving packets 
 // in seconds 
@@ -38,6 +38,9 @@ int pingloop=1;
 
 // Define path and name for output file
 #define FILE_PATH "/home/katrina/Documents/Project/csci5573-project/test_programs/ping_output_gs.txt"
+
+// Define ping path
+#define PING_PATH "google.com"
 
 // ping packet structure 
 struct ping_pkt 
@@ -255,7 +258,7 @@ void send_ping(int ping_sockfd, struct sockaddr_in *ping_addr,
 } 
 
 // Driver Code 
-int main(int argc, char *argv[]) 
+int main() 
 { 
     int sockfd; 
     char *ip_addr, *reverse_hostname; 
@@ -266,13 +269,13 @@ int main(int argc, char *argv[])
     char header_string[256] = "PING OUTPUT FROM GRACEFUL SHUTDOWN TEST";
     write_to_file(header_string);
   
-    if(argc!=2) 
-    { 
-        printf("\nFormat %s <address>\n", argv[0]); 
-        return 0; 
-    } 
+    // if(argc!=2) 
+    // { 
+    //     printf("\nFormat %s <address>\n", argv[0]); 
+    //     return 0; 
+    // } 
   
-    ip_addr = dns_lookup(argv[1], &addr_con); 
+    ip_addr = dns_lookup(PING_PATH, &addr_con); 
     if(ip_addr==NULL) 
     { 
         printf("\nDNS lookup failed! Could not resolve hostname!\n"); 
@@ -281,7 +284,7 @@ int main(int argc, char *argv[])
   
     reverse_hostname = reverse_dns_lookup(ip_addr); 
     printf("\nTrying to connect to '%s' IP: %s\n"
-    	   , argv[1]
+    	   , PING_PATH
     	   , ip_addr); 
     printf("\nReverse Lookup domain: %s", reverse_hostname); 
   
@@ -299,7 +302,7 @@ int main(int argc, char *argv[])
   
     //send pings continuously 
     send_ping(sockfd, &addr_con, reverse_hostname,  
-                                 ip_addr, argv[1]); 
+                                 ip_addr, PING_PATH); 
       
     return 0; 
 } 
