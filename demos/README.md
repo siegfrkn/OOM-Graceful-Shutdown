@@ -1,7 +1,7 @@
-###Explanation of Demo Files
+# Explanation of Demo Files
 The demo videos are screen recordings which do not have accompanying audio. To enhance understanding of what is being performed in the demo, detailed descriptions have been added here.
 
-##Simple Graceful Shutdown Demo
+### Simple Graceful Shutdown Demo
 The simple graceful shutdown video demonstrates the basic functionality of the graceful shutdown implementation.
 
 The demo begins in the main project directory ```../csci5573-project``` (0:00). The contents of the directory are listed (0:05), and then enters the ```test_programs``` subdirectory where the demo will be carried out (0:08).
