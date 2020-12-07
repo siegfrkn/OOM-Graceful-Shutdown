@@ -3,7 +3,7 @@ LINUX_SOURCE_DIR:=/usr/src/linux-5.4.1/
 .PHONY: tests linux_built.txt
 
 all: tests linux_built.txt
-	echo "\n Install Complete!"
+	echo "\n Install Complete!" &>/dev/null
 
 setup_new_vm:
 	/bin/bash -c "sudo ./setup_new_vm.sh"
