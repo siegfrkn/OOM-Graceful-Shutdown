@@ -36,6 +36,20 @@ The program will start the ```oom_condition_creator``` program and pause and wai
 
 
 ## Testing File Read and Write
+This test uses the program ```read_and_write_to_file_gs``` as the graceful shutdown program. When called, it line-by-line reads from a file named "read_from_test.txt" containing an except from Huckleberry Finn, and creates a file named "write_to_test.txt" in the ```test_programs``` directory which then contains a copy of the contents from "read_from_test.txt" file. The path and name of the file are hardcoded inside of the test file, so in order to change this path to match your own user directory you must open the source file, edit, close, and re-make before executing. The command to execute this file will need to look something like the following:
+
+```./run_program_with_gs.sh /<full>/<file>/<path>/Project/csci5573-project/test_programs/oom_condition_creator /<full>/<file>/<path>/Project/csci5573-project/test_programs/read_and_write_to_file_gs_test```
+
+The program will start the ```oom_condition_creator``` program and pause and wait for the user to press ```Enter```. After that, the program will start allocating large blocks of memory until an OOM condition is created and the program is marked for shutdown. It will then call and execute the ```read_and_write_to_file_gs``` program which will line-by-line read the "read_from_test.txt" file, and then create a file, "write_to_test.txt" in the ```test_programs``` directory, which then contains the same text as the file which was read in, both contain the following text:
+
+"CHAPTER 1
+
+DISCOVER MOSES AND THE BULRUSHERS
+
+You don't know about me without you have read a book by the name of The Adventures of Tom Sawyer; but that ain't no matter. That book was made by Mr. Mark Twain, and he told the truth, mainly. There was things which he stretched, but mainly he told the truth. That is nothing. I never seen anybody but lied one time or another, without it was Aunt Polly, or the widow, or maybe Mary. Aunt Polly--Tom's Aunt Polly, she is--and Mary, and the Widow Douglas is all told about in that book, which is mostly a true book, with some stretchers, as I said before.
+
+Now the way that the book winds up is this: Tom and me found the money that the robbers hid in the cave, and it made us rich. We got six thousand dollars apiece--all gold. It was an awful sight of money when it was piled up. Well, Judge Thatcher he took it and put it out at interest, and it fetched us a dollar a day apiece all the year round--more than a body could tell what to do with. The Widow Douglas she took me for her son, and allowed she would sivilize me; but it was rough living in the house all the time, considering how dismal regular and decent the widow was in all her ways; and so when I couldn't stand it no longer I lit out. I got into my old rags and my sugar-hogshead again, and was free and satisfied. But Tom Sawyer he hunted me up and said he was going to start a band of robbers, and I might join if I would go back to the widow and be respectable. So I went back."
+
 
 ## Testing Server Connectivity
 
