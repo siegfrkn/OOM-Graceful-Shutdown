@@ -8,11 +8,13 @@
 
 #define SHMSZ 13
 
+#define FILE_PATH "/home/katrina/Documents/Project/csci5573-project/test_programs/data.txt"
+
 int main(void){
         int i, shmid;
         char *shm, *s, *message;
 	FILE *f;
-	f = fopen("data.txt", "w");
+	f = fopen(FILE_PATH, "w");
 
 	if (f == NULL){
 		printf("Unable to open file.\n");
