@@ -8,6 +8,7 @@ all: tests linux_built.txt
 setup_new_vm:
 	/bin/bash -c "sudo ./setup_new_vm.sh"
 	echo "New VM setup complete!"
+	echo "Continuing install..."
 
 
 linux_built.txt:  setup_new_vm oom_kill.c
