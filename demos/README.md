@@ -31,3 +31,9 @@ Switching tabs, dmesg is called to show all kernel commands (2:13). The actual t
 Switching tabs again, the contents of the ```test_programs``` directory is shown again. This time there is an additional file, ```graceful_shutdown_output.txt``` which was created by the graceful shutdown process when the oom killer was called on the oom condition creating program. The file contents are cat'ed out and read:
 
 "The oom killer was invoked, and this is a file generated as a result of the graceful shutdown."
+
+### Connecting to Server Demo
+
+### Read and Write to File Demo
+
+### Accessing Shared Memory Demo
