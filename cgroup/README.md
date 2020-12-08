@@ -23,6 +23,9 @@ If any further changes are made to these files once they are implemented and the
 
 ### Resources
 https://www.lesbonscomptes.com/recoll/faqsandhowtos/cgroups_instructions.html
+
 http://www.fernandoalmeida.net/blog/how-to-limit-cpu-and-memory-usage-with-cgroups-on-debian-ubuntu/
+
 https://linuxmedium.com/how-to-enable-etc-rc-local-with-systemd-on-ubuntu-20-04/
+
 https://unix.stackexchange.com/questions/34334/how-to-create-a-user-with-limited-ram-usage
