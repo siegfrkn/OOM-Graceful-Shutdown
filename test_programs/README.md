@@ -90,3 +90,8 @@ The program will start the ```oom_condition_creator``` program and pause and wai
 
 
 ## Testing Access to Shared Data
+The shared data test uses two distinct programs, ```oom_condition_creator_shm``` and ```read_mem```. This version of the oom program is identical to the original, except that it writes a number into a shared data space, which is then read by the ```read_mem``` function which writes that information to a file created in the ```test_programs``` directory named "data.txt". The path and name of the file are hardcoded inside of the test file as well so to change these values you must open the source file, edit, close, and re-make before executing. The command to execute this test will look something like the following:
+
+```./run_program_with_gs.sh /<full>/<file>/<path>/Project/csci5573-project/test_programs/oom_condition_creator_shm /<full>/<file>/<path>/Project/csci5573-project/test_programs/read_mem```
+
+The program will start the ```oom_condition_creator_shm``` program and pause and wait for the user to press ```Enter```. After that, the program will start allocating large blocks of memory until an OOM conditionis created, and as it does this it will write the number of write iterations to the shared data space. In this particular implementation, the 1000MB allocation is larger than the cgroup 500MB allocation, so it is only expected the shared data value will ever be one. The OOM condition is then created and the ```read_mem``` program will be calles, which reads the shared data and writes it to a new file named "data.txt".
