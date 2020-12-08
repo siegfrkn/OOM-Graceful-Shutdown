@@ -25,7 +25,9 @@ proc: setup_new_vm
 	$(MAKE) install -C proc_filesystem
 
 clean:
-	sudo rm -r linux-5.4.1*
-	sudo rm -r $(LINUX_SOURCE_DIR)
+	sudo rm -rf linux-5.4.1*
+	sudo rm -rf $(LINUX_SOURCE_DIR)
 	$(MAKE) -C proc_filesystem
 	$(MAKE) clean -C test_programs
+	sudo rm -rf install.log
+	sudo rm -rf sys_install.log
