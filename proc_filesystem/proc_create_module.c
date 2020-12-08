@@ -31,7 +31,7 @@ static ssize_t mywrite(struct file *file, const char __user *ubuf,size_t count, 
 {
 	int c;
 	char buf[BUFSIZE];
-  printk( KERN_DEBUG "write handler\n");
+  printk( KERN_DEBUG "write handler for /proc/graceful_shutdown\n");
   printk("user buffer: %s\n", ubuf);
 
 	if(*ppos > 0 || count > BUFSIZE)
@@ -48,7 +48,6 @@ static ssize_t mywrite(struct file *file, const char __user *ubuf,size_t count, 
 	pid_p = pid;
 	fpath_p = fpath;
 	c = strlen(buf);
-	printk("ode output: %s %s\n", pid_p, fpath_p);
 	*ppos = c;
 	return c;
 }
@@ -57,7 +56,7 @@ static ssize_t myread(struct file *file, char __user *ubuf,size_t count, loff_t 
 {
 	char buf[BUFSIZE];
 	int len=0;
-  printk( KERN_DEBUG "read handler\n");
+  printk( KERN_DEBUG "read handler for /proc/graceful_shutdown\n");
 	if(*ppos > 0 || count < BUFSIZE)
 		return 0;
 
@@ -65,7 +64,6 @@ static ssize_t myread(struct file *file, char __user *ubuf,size_t count, loff_t 
 
 	if(copy_to_user(ubuf,buf,len))
 		return -EFAULT;
-	printk("user buffer: %s\n", ubuf);
 
 	*ppos = len;
 	return len;
@@ -86,15 +84,14 @@ void create_new_proc_entry(void)
 	if (graceful_shutdown_file == NULL)
 	{
 		proc_remove(graceful_shutdown_file);
-		printk(KERN_ALERT "Error: Could not initialize /proc/%s\n",
-      PROCFS_NAME);
+		printk(KERN_ALERT "Error: Could not initialize /proc/%s\n", PROCFS_NAME);
 	}
 }
 
 // Init module for creating the new proc directory
 static int proc_init(void)
 {
-	printk( KERN_DEBUG "\n\n\nmodule begin\n");
+	printk( KERN_DEBUG "\n\n\nLKM /proc/graceful_shutdown begin\n");
 	create_new_proc_entry();
 	return 0;
 }
@@ -103,7 +100,7 @@ static int proc_init(void)
 static void proc_cleanup(void)
 {
 	proc_remove(graceful_shutdown_file);
-	printk( KERN_DEBUG "module end\n");
+	printk( KERN_DEBUG "LKM /proc/graceful_shutdown end\n");
 }
 
 module_init(proc_init);
