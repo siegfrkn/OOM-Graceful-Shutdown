@@ -5,6 +5,7 @@ After=network.target
 [Service]
 User=root
 Group=root
+ExecStart=
 ExecStart=/usr/sbin/cgconfigparser -l /etc/cgconfig.conf
 Type=oneshot
 
